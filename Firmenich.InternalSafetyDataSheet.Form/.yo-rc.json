@@ -1,0 +1,17 @@
+{
+  "@microsoft/generator-sharepoint": {
+    "plusBeta": false,
+    "isCreatingSolution": true,
+    "version": "1.15.0",
+    "libraryName": "firmenich-internal-safety-data-sheet-form",
+    "libraryId": "d1676a20-e59a-4182-91ec-70d9d4b4f6ec",
+    "environment": "spo",
+    "packageManager": "npm",
+    "solutionName": "Firmenich.InternalSafetyDataSheet.Form",
+    "solutionShortDescription": "Firmenich.InternalSafetyDataSheet.Form description",
+    "skipFeatureDeployment": true,
+    "isDomainIsolated": false,
+    "componentType": "extension",
+    "extensionType": "FormCustomizer"
+  }
+}

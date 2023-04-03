@@ -1,0 +1,40 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/spfx-build/package-solution.schema.json",
+  "solution": {
+    "name": "firmenich-internal-safety-data-sheet-form-client-side-solution",
+    "id": "d1676a20-e59a-4182-91ec-70d9d4b4f6ec",
+    "version": "1.0.0.0",
+    "includeClientSideAssets": true,
+    "skipFeatureDeployment": true,
+    "isDomainIsolated": false,
+    "developer": {
+      "name": "",
+      "websiteUrl": "",
+      "privacyUrl": "",
+      "termsOfUseUrl": "",
+      "mpnId": "Undefined-1.15.0"
+    },
+    "metadata": {
+      "shortDescription": {
+        "default": "Firmenich.InternalSafetyDataSheet.Form description"
+      },
+      "longDescription": {
+        "default": "Firmenich.InternalSafetyDataSheet.Form description"
+      },
+      "screenshotPaths": [],
+      "videoUrl": "",
+      "categories": []
+    },
+    "features": [
+      {
+        "title": "firmenich-internal-safety-data-sheet-form Feature",
+        "description": "The feature that activates elements of the firmenich-internal-safety-data-sheet-form solution.",
+        "id": "7db0c100-0350-4e26-aeff-6ba175400dd5",
+        "version": "1.0.0.0"
+      }
+    ]
+  },
+  "paths": {
+    "zippedPackage": "solution/firmenich-internal-safety-data-sheet-form.sppkg"
+  }
+}

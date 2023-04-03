@@ -1,0 +1,53 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/core-build/serve.schema.json",
+  "port": 4321,
+  "https": true,
+  "serveConfigurations": {
+    "default": {
+      "pageUrl": "https://83x4xw.sharepoint.com/sites/InternalSafetyDataSheet/_layouts/15/SPListForm.aspx",
+      "formCustomizer": {
+        "componentId": "721371dd-c441-4f30-9320-ead1cf855dca",
+        "PageType": 8,
+        "RootFolder": "/sites/InternalSafetyDataSheet/Lists/InternalSafetyDataSheet",
+        "properties": {
+          "sampleText": "Value"
+        }
+      }
+    },
+    "firmenichCustomForm_NewForm": {
+      "pageUrl": "https://83x4xw.sharepoint.com/sites/InternalSafetyDataSheet/_layouts/15/SPListForm.aspx",
+      "formCustomizer": {
+        "componentId": "721371dd-c441-4f30-9320-ead1cf855dca",
+        "PageType": 8,
+        "RootFolder": "/sites/InternalSafetyDataSheet/Lists/InternalSafetyDataSheet",
+        "properties": {
+          "sampleText": "Value"
+        }
+      }
+    },
+    "firmenichCustomForm_EditForm": {
+      "pageUrl": "https://83x4xw.sharepoint.com/sites/InternalSafetyDataSheet/_layouts/15/SPListForm.aspx",
+      "formCustomizer": {
+        "componentId": "721371dd-c441-4f30-9320-ead1cf855dca",
+        "PageType": 6,
+        "RootFolder": "/sites/InternalSafetyDataSheet/Lists/InternalSafetyDataSheet",
+        "ID": 1,
+        "properties": {
+          "sampleText": "Value"
+        }
+      }
+    },
+    "firmenichCustomForm_ViewForm": {
+      "pageUrl": "https://83x4xw.sharepoint.com/sites/InternalSafetyDataSheet/_layouts/15/SPListForm.aspx",
+      "formCustomizer": {
+        "componentId": "721371dd-c441-4f30-9320-ead1cf855dca",
+        "PageType": 4,
+        "RootFolder": "/sites/InternalSafetyDataSheet/Lists/InternalSafetyDataSheet",
+        "ID": 1,
+        "properties": {
+          "sampleText": "Value"
+        }
+      }
+    }
+  }
+}
