@@ -5,6 +5,9 @@
   "main": "lib/index.js",
   "scripts": {
     "build": "gulp bundle",
+    "new": "gulp serve --config=firmenichCustomForm_NewForm",
+    "edit": "gulp serve --config=firmenichCustomForm_EditForm",
+    "view": "gulp serve --config=firmenichCustomForm_ViewForm",
     "clean": "gulp clean",
     "test": "gulp test"
   },
