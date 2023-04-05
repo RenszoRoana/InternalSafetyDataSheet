@@ -1,4 +1,4 @@
-export default interface IInternalSafetyDataSheetItem{
-    Title:string;       
+export interface IInternalSafetyDataSheetItem {
+    Title: string;
     RaonaAcciepand: string;
 }
