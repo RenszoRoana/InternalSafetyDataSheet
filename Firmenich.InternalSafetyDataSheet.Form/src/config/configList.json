@@ -1,0 +1,90 @@
+[
+  {
+    "key": "Acciepand",
+    "stateProp": "acciepanIComboBoxOption"
+  },
+  {
+    "key": "Accifeu",
+    "stateProp": "accifeuIComboBoxOption"
+  },
+  {
+    "key": "Aspect",
+    "stateProp": "aspectIComboBoxOption"
+  },
+  {
+    "key": "Clastoxic",
+    "stateProp": "clastoxicIComboBoxOption"
+  },
+  {
+    "key": "Corpsecpeau",
+    "stateProp": "corpsecpeauIComboBoxOption"
+  },
+  {
+    "key": "Corpsecresp",
+    "stateProp": "corpsecrespIComboBoxOption"
+  },
+  {
+    "key": "Corpsecyeux",
+    "stateProp": "corpsecyeuxIComboBoxOption"
+  },
+  {
+    "key": "Couleur",
+    "stateProp": "couleurIComboBoxOption"
+  },
+  {
+    "key": "Dangers",
+    "stateProp": "dangersIComboBoxOption"
+  },
+  {
+    "key": "DangersComplement",
+    "stateProp": "dangersComplementIComboBoxOption"
+  },
+  {
+    "key": "DangexiFilter",
+    "stateProp": "dangexiFilterIComboBoxOption"
+  },
+  {
+    "key": "EnvironmentFilter",
+    "stateProp": "environmentFilterIComboBoxOption"
+  },
+  {
+    "key": "MesuresParticuileres",
+    "stateProp": "mesuresParticuileresIComboBoxOption"
+  },
+  {
+    "key": "Odeur",
+    "stateProp": "odeurIComboBoxOption"
+  },
+  {
+    "key": "Protection",
+    "stateProp": "protectionIComboBoxOption"
+  },
+  {
+    "key": "Reference",
+    "stateProp": "referenceIComboBoxOption"
+  },
+  {
+    "key": "Repository",
+    "stateProp": "repositoryIComboBoxOption"
+  },
+  {
+    "key": "Reusable Content",
+    "stateProp": "reusableContentIComboBoxOption"
+  },
+  {
+    "key": "Solvants",
+    "stateProp": "solvantsIComboBoxOption"
+  },
+  {
+    "key": "Stabilis",
+    "stateProp": "stabilisIComboBoxOption"
+  },
+  {
+    "key": "ToxicFilter",
+    "stateProp": "toxicFilterIComboBoxOption"
+  },
+  {
+    "key": "ToxiciteComplement",
+    "stateProp": "toxiciteComplementIComboBoxOption"
+  }
+]
