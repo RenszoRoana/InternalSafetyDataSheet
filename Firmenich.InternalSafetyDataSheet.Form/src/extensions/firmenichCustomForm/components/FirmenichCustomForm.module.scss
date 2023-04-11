@@ -1,10 +1,20 @@
+:global {
+  input[id*="ComboBox"] {
+    display: none;
+  }
+
+  div[id*="ComboBox"] {
+    padding-left: 0;
+  }
+}
+
 .firmenichCustomForm {
   background-color: "[theme:white, default:#ffffff]";
   color: "[theme:themePrimary, default:#0078d4]";
   padding: 0.5rem;
 }
 
-.comboBoxTEEEEEEST{  
+.comboBoxTEEEEEEST {
   // margin-left: 0 !important;
   color: black;
 }
