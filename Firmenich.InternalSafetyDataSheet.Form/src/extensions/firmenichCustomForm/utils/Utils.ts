@@ -5,6 +5,9 @@ export class Utils {
     return str.replace(/\s/g, "");
   };
 
+  public static RemoveDuplicateItems<T>(arr: T[]): T[] {
+    return [...new Set(arr)];
+  };
 
   public static FirstLetterToLowerCase(str: string): string {
     const result = str.charAt(0).toLowerCase() + str.slice(1);
