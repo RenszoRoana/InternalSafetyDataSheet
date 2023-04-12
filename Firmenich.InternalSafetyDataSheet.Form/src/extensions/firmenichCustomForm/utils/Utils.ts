@@ -35,4 +35,11 @@ export class Utils {
   public static FormatDisplayMessage(message: string): string {
     return !!message ? message : "Non determiné";
   };
+
+  public static CheckCommas(str: string): string {
+    let newString = str.trim();
+    newString = newString.endsWith(",") ? `${newString} ` : `${newString}, `;
+    return newString;
+  }
+
 }
