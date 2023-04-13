@@ -1,4 +1,5 @@
 export interface IInternalSafetyDataSheetItem {
     Title: string;
-    RaonaAcciepand: string;
+    Acciepand: string;
+    Dangers: string;
 }
