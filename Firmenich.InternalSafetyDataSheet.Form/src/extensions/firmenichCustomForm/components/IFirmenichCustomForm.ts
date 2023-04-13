@@ -36,6 +36,7 @@ export interface IFirmenichCustomFormState {
     Supinflammation: string;
     Densvap: string;
     Tensvap: string;
+    SolubiliteDansLeau: string;
     Vmeppm: string;
     CL50inhal: string;
     Vleppm: string;
@@ -47,6 +48,11 @@ export interface IFirmenichCustomFormState {
     Modifdoc: string;
     Visadate: string;
     Visapers: string;
+
+    Dangers: string[];
+    Aspect: string[];
+    Couleur: string;
+    Odeur: string[];
 
     itemsPicsSelected: any[];
     urlsPicturesSelected: string[];
