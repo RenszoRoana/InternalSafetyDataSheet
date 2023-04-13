@@ -24,11 +24,20 @@ export const useComboBoxOptions = ({ state, updateState }: IComboBoxOptionsHook)
   const selectedOdeurKeys = useSelectedKeysFromComboBoxOptions(state.itemsOdeurSelectedText, state.odeurIComboBoxOption);
   useSelectedItemsUpdater("itemsOdeurSelectedText", state.Odeur, state.itemsOdeurSelectedText, updateState);
 
+  const selectedDangerxiKeys = useSelectedKeysFromComboBoxOptions(state.itemsDangexiFilterSelectedText, state.dangexiFilterIComboBoxOption);
+  useSelectedItemsUpdater("itemsDangexiFilterSelectedText", state.Dangerxi, state.itemsDangexiFilterSelectedText, updateState);
+
+  const selectedProtectionKeys = useSelectedKeysFromComboBoxOptions(state.itemsProtectionSelectedText, state.protectionIComboBoxOption);
+  useSelectedItemsUpdater("itemsProtectionSelectedText", state.Protection, state.itemsProtectionSelectedText, updateState);
+
+
   return {
     selectedDangersKeys,
     selectedAspectKeys,
     selectedCouleurKeys,
     selectedOdeurKeys,
+    selectedDangerxiKeys,
+    selectedProtectionKeys,
   };
 };
 

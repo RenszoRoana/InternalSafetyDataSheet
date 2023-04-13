@@ -29,7 +29,9 @@ const comboBoxStyles: Partial<IComboBoxStyles> = { root: { maxWidth: 300 } };
 export const CustomForm: React.FC<ICustomFormProps> = ({ state, updateState, displayMode, context, onSave, onClose }) => {
   const { onSaveForm } = useInternalSafetyDataSheet({ state, context, displayMode, onSave });
   const { updateSelectedText, updateSelectedItems } = useComboBoxSelectionHandler({ state, updateState });
-  const { selectedDangersKeys, selectedAspectKeys, selectedOdeurKeys, selectedCouleurKeys } = useComboBoxOptions({ state, updateState });
+  const {
+    selectedDangersKeys, selectedAspectKeys, selectedOdeurKeys, selectedCouleurKeys, selectedDangerxiKeys, selectedProtectionKeys
+  } = useComboBoxOptions({ state, updateState });
 
   const viewMode = displayMode === DisplayMode.ViewMode;
 
@@ -129,10 +131,10 @@ export const CustomForm: React.FC<ICustomFormProps> = ({ state, updateState, dis
           <Stack.Item grow={1}>
             <TextField
               label="Nº UN"
-              value={state.CodeOnu}
+              value={state.CodeONU}
               disabled={viewMode}
-              onChange={(e, CodeOnu) => {
-                updateState({ ...state, CodeOnu: CodeOnu });
+              onChange={(e, CodeONU) => {
+                updateState({ ...state, CodeONU: CodeONU });
               }}
             />
           </Stack.Item>
@@ -142,10 +144,10 @@ export const CustomForm: React.FC<ICustomFormProps> = ({ state, updateState, dis
           <Stack.Item grow={5}>
             <TextField
               label="Formule brute"
-              value={state.NomChim}
+              value={state.Nomchim}
               disabled={viewMode}
-              onChange={(e, NomChim) => {
-                updateState({ ...state, NomChim: NomChim });
+              onChange={(e, Nomchim) => {
+                updateState({ ...state, Nomchim: Nomchim });
               }}
             />
           </Stack.Item>
@@ -291,10 +293,10 @@ export const CustomForm: React.FC<ICustomFormProps> = ({ state, updateState, dis
           <Stack.Item grow={4}>
             <TextField
               label="Point d'auto inflammation (º C)"
-              value={Utils.FormatDisplayMessage(state.Pointif)}
+              value={Utils.FormatDisplayMessage(state.Pointinf)}
               disabled={viewMode}
-              onChange={(e, Pointif) => {
-                updateState({ ...state, Pointif: Pointif });
+              onChange={(e, Pointinf) => {
+                updateState({ ...state, Pointinf: Pointinf });
               }}
             />
           </Stack.Item>
@@ -324,7 +326,7 @@ export const CustomForm: React.FC<ICustomFormProps> = ({ state, updateState, dis
           <Stack.Item grow={2}>
             <TextField
               label="Densité"
-              value={Utils.FormatDisplayMessage(state.Densite)}
+              value={Utils.FormatDisplayMessage(state.Densite)} // Actual internal name Densit_x00e9_,
               disabled={viewMode}
               onChange={(e, Densite) => {
                 updateState({ ...state, Densite: Densite });
@@ -337,7 +339,8 @@ export const CustomForm: React.FC<ICustomFormProps> = ({ state, updateState, dis
           <Stack.Item grow={4}>
             <TextField
               label="Limite supérieure d’inflammation"
-              value={state.Supinflammation}
+              // value={state.Supinflammation}
+              value={Utils.FormatDisplayMessage(state.Supinflammation)}
               disabled={viewMode}
               onChange={(e, Supinflammation) => {
                 updateState({ ...state, Supinflammation: Supinflammation });
@@ -370,7 +373,7 @@ export const CustomForm: React.FC<ICustomFormProps> = ({ state, updateState, dis
           <Stack.Item grow={2}>
             <TextField
               label="Solubilité dans l'eau"
-              value={Utils.FormatDisplayMessage(state.SolubiliteDansLeau)}
+              value={state.Solvants.toString()}
               disabled={viewMode}
               onChange={(e, SolubiliteDansLeau) => {
                 updateState({ ...state, SolubiliteDansLeau: SolubiliteDansLeau });
@@ -439,7 +442,7 @@ export const CustomForm: React.FC<ICustomFormProps> = ({ state, updateState, dis
           <Stack.Item grow={2}>
             <TextField
               label="DL50 (oral-g/kg)"
-              value={Utils.FormatDisplayMessage(state.DL50)}
+              value={Utils.FormatDisplayMessage(state.DL50)} // Internal name _x0044_L50
               disabled={viewMode}
               onChange={(e, DL50) => {
                 updateState({ ...state, DL50: DL50 });
@@ -470,6 +473,7 @@ export const CustomForm: React.FC<ICustomFormProps> = ({ state, updateState, dis
                 options={state.dangexiFilterIComboBoxOption}
                 styles={comboBoxStyles}
                 buttonIconProps={{ iconName: "More" }}
+                selectedKey={selectedDangerxiKeys}
                 onChange={(event, selectedOption) => updateSelectedItems(selectedOption, "itemsDangexiFilterSelectedText", "itemsDangexiFilter")}
               />
             </Stack.Item>
@@ -511,7 +515,7 @@ export const CustomForm: React.FC<ICustomFormProps> = ({ state, updateState, dis
           <Stack.Item grow={6}>
             <TextField
               ariaLabel="Without visible label"
-              value={state.itemsToxicFilterSelectedText}
+              value={state.itemsToxicFilterSelectedText} // Internal name Toxicit_x00e9_
               disabled={viewMode}
               onChange={(e, text) => {
                 updateState({ ...state, itemsToxicFilterSelectedText: text });
@@ -580,8 +584,8 @@ export const CustomForm: React.FC<ICustomFormProps> = ({ state, updateState, dis
               ariaLabel="Without visible label"
               value={state.itemsProtectionSelectedText}
               disabled={viewMode}
-              onChange={(e, text) => {
-                updateState({ ...state, itemsProtectionSelectedText: text });
+              onChange={(e, itemsProtectionSelectedText) => {
+                updateState({ ...state, itemsProtectionSelectedText: itemsProtectionSelectedText });
               }}
             />
           </Stack.Item>
@@ -593,6 +597,7 @@ export const CustomForm: React.FC<ICustomFormProps> = ({ state, updateState, dis
                 options={state.protectionIComboBoxOption}
                 styles={comboBoxStyles}
                 buttonIconProps={{ iconName: "More" }}
+                selectedKey={selectedProtectionKeys}
                 onChange={(event, selectedOption) => updateSelectedText(selectedOption, "itemsProtectionSelectedText")}
               // onChange={(e, selectedOption) => {
               //   let itemsProtectionFilterSelected: string = state.itemsProtectionSelectedText;
