@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-floating-promises */
 /* eslint-disable @typescript-eslint/naming-convention */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import * as React from "react";
@@ -6,12 +5,14 @@ import * as React from "react";
 import { FormCustomizerContext } from "@microsoft/sp-listview-extensibility";
 import { ComboBox, DefaultButton, IComboBoxStyles, Label, PrimaryButton, Stack, TextField } from "office-ui-fabric-react";
 
-import { Utils } from "../utils/Utils";
-import { IFirmenichCustomFormState } from "./IFirmenichCustomForm";
+import { useComboBoxOptions } from "../hooks/useComboBoxOptions";
+import { useComboBoxSelectionHandler } from "../hooks/useComboBoxSelectionHandler";
+import { useInternalSafetyDataSheet } from "../hooks/useInternalSafetyDataSheet";
 
-import { useCustomForm } from "../hooks/useCustomform";
+import { Utils } from "../utils/Utils";
+import { DisplayMode, IFirmenichCustomFormState } from "./IFirmenichCustomForm";
+
 import styles from "./FirmenichCustomForm.module.scss";
-// require("./FirmenichCustomForm.css");
 
 export interface ICustomFormProps {
   context: FormCustomizerContext;
@@ -26,26 +27,11 @@ const comboBoxStyles: Partial<IComboBoxStyles> = { root: { maxWidth: 300 } };
 
 
 export const CustomForm: React.FC<ICustomFormProps> = ({ state, updateState, displayMode, context, onSave, onClose }) => {
-  const { viewMode, onSaveForm } = useCustomForm({ context, displayMode, state, onSave });
+  const { onSaveForm } = useInternalSafetyDataSheet({ state, context, displayMode, onSave });
+  const { updateSelectedText, updateSelectedItems } = useComboBoxSelectionHandler({ state, updateState });
+  const { selectedDangersKeys, selectedAspectKeys, selectedOdeurKeys, selectedCouleurKeys } = useComboBoxOptions({ state, updateState });
 
-
-  // const handleOnChange = (e, section, selectedOption) => {
-  //   const { selectedText, onChange } = section;
-  //   const valueSelected = `${selectedOption.text}, `;
-
-  //   let newSelectedText;
-  //   if (selectedOption.selected) {
-  //     newSelectedText = selectedText ? `${selectedText}${valueSelected}` : valueSelected;
-  //   } else {
-  //     newSelectedText = selectedText.replace(valueSelected, "");
-  //   }
-
-  //   onChange(newSelectedText);
-  // };
-
-  // const setTextFieldState = (newState) => {
-  //   updateState(newState);
-  // };
+  const viewMode = displayMode === DisplayMode.ViewMode;
 
 
   return (
@@ -78,7 +64,7 @@ export const CustomForm: React.FC<ICustomFormProps> = ({ state, updateState, dis
         <Stack horizontal tokens={{ childrenGap: 20 }}>
           <Stack.Item grow={3}>
             <TextField
-              label="Mention d'advertissement"
+              label="Mention d'avertissement"
               value={state.Mention}
               disabled={viewMode}
               onChange={(e, Mention) => { updateState({ Mention: Mention }); }}
@@ -95,7 +81,6 @@ export const CustomForm: React.FC<ICustomFormProps> = ({ state, updateState, dis
         <Stack horizontal tokens={{ childrenGap: 20 }}>
           <Stack.Item grow={6}>
             <TextField
-              // label='Dangers principaux'
               ariaLabel="Without visible label"
               value={state.itemsDangersSelectedText}
               disabled={viewMode}
@@ -110,17 +95,8 @@ export const CustomForm: React.FC<ICustomFormProps> = ({ state, updateState, dis
                 options={state.dangersIComboBoxOption}
                 styles={comboBoxStyles}
                 buttonIconProps={{ iconName: "More" }}
-                onChange={(e, selectedOption) => {
-                  let itemsDangersTextSelected: string = state.itemsDangersSelectedText;
-                  const valueSelected: string = selectedOption.text.concat(", ");
-                  if (selectedOption.selected) {
-                    itemsDangersTextSelected = itemsDangersTextSelected.length === 0 ? valueSelected : itemsDangersTextSelected.concat(valueSelected);
-                  }
-                  else {
-                    itemsDangersTextSelected = itemsDangersTextSelected.length === 0 ? "" : itemsDangersTextSelected.replace(valueSelected, "");
-                  }
-                  updateState({ ...state, itemsDangersSelectedText: itemsDangersTextSelected });
-                }}
+                selectedKey={selectedDangersKeys}
+                onChange={(event, selectedOption) => updateSelectedText(selectedOption, "itemsDangersSelectedText")}
               />
             </Stack.Item>
           )}
@@ -206,17 +182,8 @@ export const CustomForm: React.FC<ICustomFormProps> = ({ state, updateState, dis
                   options={state.aspectIComboBoxOption}
                   styles={comboBoxStyles}
                   buttonIconProps={{ iconName: "More" }}
-                  onChange={(e, selectedOption) => {
-                    let itemsAspectTextSelected: string = state.itemsAspectSelectedText;
-                    const valueSelected: string = selectedOption.text.concat(", ");
-                    if (selectedOption.selected) {
-                      itemsAspectTextSelected = itemsAspectTextSelected.length === 0 ? valueSelected : itemsAspectTextSelected.concat(valueSelected);
-                    }
-                    else {
-                      itemsAspectTextSelected = itemsAspectTextSelected.length === 0 ? "" : itemsAspectTextSelected.replace(valueSelected, "");
-                    }
-                    updateState({ ...state, itemsAspectSelectedText: itemsAspectTextSelected });
-                  }}
+                  selectedKey={selectedAspectKeys}
+                  onChange={(event, selectedOption) => updateSelectedText(selectedOption, "itemsAspectSelectedText")}
                 />
               </Stack.Item>
             )}
@@ -241,17 +208,8 @@ export const CustomForm: React.FC<ICustomFormProps> = ({ state, updateState, dis
                   options={state.couleurIComboBoxOption}
                   styles={comboBoxStyles}
                   buttonIconProps={{ iconName: "More" }}
-                  onChange={(e, selectedOption) => {
-                    let itemsCouleurTextSelected: string = state.itemsCouleurSelectedText;
-                    const valueSelected: string = selectedOption.text.concat(", ");
-                    if (selectedOption.selected) {
-                      itemsCouleurTextSelected = itemsCouleurTextSelected.length === 0 ? valueSelected : itemsCouleurTextSelected.concat(valueSelected);
-                    }
-                    else {
-                      itemsCouleurTextSelected = itemsCouleurTextSelected.length === 0 ? "" : itemsCouleurTextSelected.replace(valueSelected, "");
-                    }
-                    updateState({ ...state, itemsCouleurSelectedText: itemsCouleurTextSelected });
-                  }}
+                  selectedKey={selectedCouleurKeys}
+                  onChange={(event, selectedOption) => updateSelectedText(selectedOption, "itemsCouleurSelectedText")}
                 />
               </Stack.Item>
             )}
@@ -278,17 +236,8 @@ export const CustomForm: React.FC<ICustomFormProps> = ({ state, updateState, dis
                 options={state.odeurIComboBoxOption}
                 styles={comboBoxStyles}
                 buttonIconProps={{ iconName: "More" }}
-                onChange={(e, selectedOption) => {
-                  let itemsOdeurFilterSelected: string = state.itemsOdeurSelectedText;
-                  const valueSelected: string = selectedOption.text.concat(", ");
-                  if (selectedOption.selected) {
-                    itemsOdeurFilterSelected = itemsOdeurFilterSelected.length === 0 ? valueSelected : itemsOdeurFilterSelected.concat(valueSelected);
-                  }
-                  else {
-                    itemsOdeurFilterSelected = itemsOdeurFilterSelected.length === 0 ? "" : itemsOdeurFilterSelected.replace(valueSelected, "");
-                  }
-                  updateState({ ...state, itemsOdeurSelectedText: itemsOdeurFilterSelected });
-                }}
+                selectedKey={selectedOdeurKeys}
+                onChange={(event, selectedOption) => updateSelectedText(selectedOption, "itemsOdeurSelectedText")}
               />
             </Stack.Item>
           )}
@@ -319,7 +268,7 @@ export const CustomForm: React.FC<ICustomFormProps> = ({ state, updateState, dis
           <Stack.Item grow={4}>
             <TextField
               label="Point d'eclair (º C)"
-              value={state.Pointec}
+              value={Utils.FormatDisplayMessage(state.Pointec)}
               disabled={viewMode}
               onChange={(e, Pointec) => {
                 updateState({ ...state, Pointec: Pointec });
@@ -329,7 +278,7 @@ export const CustomForm: React.FC<ICustomFormProps> = ({ state, updateState, dis
           <Stack.Item grow={2}>
             <TextField
               label="Point de fusion (º C)"
-              value={state.Pointfus}
+              value={Utils.FormatDisplayMessage(state.Pointfus)}
               disabled={viewMode}
               onChange={(e, Pointfus) => {
                 updateState({ ...state, Pointfus: Pointfus });
@@ -342,7 +291,7 @@ export const CustomForm: React.FC<ICustomFormProps> = ({ state, updateState, dis
           <Stack.Item grow={4}>
             <TextField
               label="Point d'auto inflammation (º C)"
-              value={state.Pointif}
+              value={Utils.FormatDisplayMessage(state.Pointif)}
               disabled={viewMode}
               onChange={(e, Pointif) => {
                 updateState({ ...state, Pointif: Pointif });
@@ -352,7 +301,7 @@ export const CustomForm: React.FC<ICustomFormProps> = ({ state, updateState, dis
           <Stack.Item grow={2}>
             <TextField
               label="Point d'ebullition (º C)"
-              value={state.Pointeb}
+              value={Utils.FormatDisplayMessage(state.Pointeb)}
               disabled={viewMode}
               onChange={(e, Pointeb) => {
                 updateState({ ...state, Pointeb: Pointeb });
@@ -375,7 +324,7 @@ export const CustomForm: React.FC<ICustomFormProps> = ({ state, updateState, dis
           <Stack.Item grow={2}>
             <TextField
               label="Densité"
-              value={state.Densite}
+              value={Utils.FormatDisplayMessage(state.Densite)}
               disabled={viewMode}
               onChange={(e, Densite) => {
                 updateState({ ...state, Densite: Densite });
@@ -398,7 +347,7 @@ export const CustomForm: React.FC<ICustomFormProps> = ({ state, updateState, dis
           <Stack.Item grow={2}>
             <TextField
               label="Densité vapeur (air 20ºC =1)"
-              value={state.Densvap}
+              value={Utils.FormatDisplayMessage(state.Densvap)}
               disabled={viewMode}
               onChange={(e, Densvap) => {
                 updateState({ ...state, Densvap: Densvap });
@@ -411,7 +360,7 @@ export const CustomForm: React.FC<ICustomFormProps> = ({ state, updateState, dis
           <Stack.Item grow={4}>
             <TextField
               label="Tension de vapeur"
-              value={state.Tensvap}
+              value={Utils.FormatDisplayMessage(state.Tensvap)}
               disabled={viewMode}
               onChange={(e, Tensvap) => {
                 updateState({ ...state, Tensvap: Tensvap });
@@ -419,7 +368,14 @@ export const CustomForm: React.FC<ICustomFormProps> = ({ state, updateState, dis
             />
           </Stack.Item>
           <Stack.Item grow={2}>
-            <Label>Aquí tiene que ir Solvants (campo Choice no lista maestra)</Label>
+            <TextField
+              label="Solubilité dans l'eau"
+              value={Utils.FormatDisplayMessage(state.SolubiliteDansLeau)}
+              disabled={viewMode}
+              onChange={(e, SolubiliteDansLeau) => {
+                updateState({ ...state, SolubiliteDansLeau: SolubiliteDansLeau });
+              }}
+            />
           </Stack.Item>
         </Stack>
 
@@ -427,7 +383,7 @@ export const CustomForm: React.FC<ICustomFormProps> = ({ state, updateState, dis
           <Stack.Item grow={4}>
             <TextField
               label="VME (ppm) (mg/m3)"
-              value={state.Vmeppm}
+              value={Utils.FormatDisplayMessage(state.Vmeppm)}
               disabled={viewMode}
               onChange={(e, Vmeppm) => {
                 updateState({ ...state, Vmeppm: Vmeppm });
@@ -437,7 +393,7 @@ export const CustomForm: React.FC<ICustomFormProps> = ({ state, updateState, dis
           <Stack.Item grow={2}>
             <TextField
               label="CL50 (inhal-mg/l)"
-              value={state.CL50inhal}
+              value={Utils.FormatDisplayMessage(state.CL50inhal)}
               disabled={viewMode}
               onChange={(e, CL50inhal) => {
                 updateState({ ...state, CL50inhal: CL50inhal });
@@ -450,7 +406,7 @@ export const CustomForm: React.FC<ICustomFormProps> = ({ state, updateState, dis
           <Stack.Item grow={4}>
             <TextField
               label="VLE (ppm) (mg/m3)"
-              value={state.Vleppm}
+              value={Utils.FormatDisplayMessage(state.Vleppm)}
               disabled={viewMode}
               onChange={(e, Vleppm) => {
                 updateState({ ...state, Vleppm: Vleppm });
@@ -460,7 +416,7 @@ export const CustomForm: React.FC<ICustomFormProps> = ({ state, updateState, dis
           <Stack.Item grow={2}>
             <TextField
               label="DL50 (dermal-mg/kg)"
-              value={state.DL50dermal}
+              value={Utils.FormatDisplayMessage(state.DL50dermal)}
               disabled={viewMode}
               onChange={(e, DL50dermal) => {
                 updateState({ ...state, DL50dermal: DL50dermal });
@@ -473,7 +429,7 @@ export const CustomForm: React.FC<ICustomFormProps> = ({ state, updateState, dis
           <Stack.Item grow={4}>
             <TextField
               label="CE50 (mg/l) (48h)"
-              value={state.CE50mg}
+              value={Utils.FormatDisplayMessage(state.CE50mg)}
               disabled={viewMode}
               onChange={(e, CE50mg) => {
                 updateState({ ...state, CE50mg: CE50mg });
@@ -483,7 +439,7 @@ export const CustomForm: React.FC<ICustomFormProps> = ({ state, updateState, dis
           <Stack.Item grow={2}>
             <TextField
               label="DL50 (oral-g/kg)"
-              value={state.DL50}
+              value={Utils.FormatDisplayMessage(state.DL50)}
               disabled={viewMode}
               onChange={(e, DL50) => {
                 updateState({ ...state, DL50: DL50 });
@@ -514,83 +470,41 @@ export const CustomForm: React.FC<ICustomFormProps> = ({ state, updateState, dis
                 options={state.dangexiFilterIComboBoxOption}
                 styles={comboBoxStyles}
                 buttonIconProps={{ iconName: "More" }}
-                onChange={(e, selectedOption) => {
-                  let itemsDangexiTextSelected: string = state.itemsDangexiFilterSelectedText;
-                  const valueSelected: string = selectedOption.text.concat(", ");
-                  const item: any = state.itemsDangexiFilter.filter(item => item.ID === selectedOption.key);
-
-                  let arrayPictures: string[] = state.urlsPicturesSelected;
-                  let itemsPicsSelected: any[] = state.itemsPicsSelected;
-
-                  if (selectedOption.selected) {
-                    itemsDangexiTextSelected = itemsDangexiTextSelected.length === 0 ? valueSelected : itemsDangexiTextSelected.concat(valueSelected);
-
-                    itemsPicsSelected.push(item[0]);
-
-                    if (item[0].Picture !== null) {
-                      if (arrayPictures.length === 0 || arrayPictures.indexOf(item[0].Picture) === -1) {
-                        arrayPictures.push(item[0].Picture);
-                      }
-                    }
-                  }
-                  else {
-                    // itemsDangexiTextSelected;
-                    itemsDangexiTextSelected = itemsDangexiTextSelected.length === 0 ? "" : itemsDangexiTextSelected.replace(valueSelected, "");
-
-                    itemsPicsSelected = itemsPicsSelected.filter(i => i.Id !== selectedOption.key && i.Title !== selectedOption.text);
-
-                    if (item[0].Picture !== null && itemsPicsSelected.filter(i => i.Picture === item[0].Picture).length === 0) {
-                      arrayPictures = arrayPictures.filter(i => i !== item[0].Picture);
-                    }
-                  }
-
-                  updateState({
-                    ...state,
-                    itemsDangexiFilterSelectedText: itemsDangexiTextSelected,
-                    urlsPicturesSelected: arrayPictures,
-                    itemsPicsSelected: itemsPicsSelected
-                  });
-                }}
+                onChange={(event, selectedOption) => updateSelectedItems(selectedOption, "itemsDangexiFilterSelectedText", "itemsDangexiFilter")}
               />
             </Stack.Item>
           )}
         </Stack>
 
-        <Label>Complément</Label>
-        <Stack horizontal tokens={{ childrenGap: 20 }}>
-          <Stack.Item grow={6}>
-            <TextField
-              ariaLabel="Without visible label"
-              value={state.itemsDangersComplementSelectedText}
-              disabled={viewMode}
-              onChange={(e, text) => {
-                updateState({ ...state, itemsDangersComplementSelectedText: text });
-              }}
-            />
-          </Stack.Item>
-          {!viewMode && (
-            <Stack.Item grow={0}>
-              <ComboBox
-                multiSelect
-                className={styles.comboBoxTEEEEEEST}
-                options={state.dangersComplementIComboBoxOption}
-                styles={comboBoxStyles}
-                buttonIconProps={{ iconName: "More" }}
-                onChange={(e, selectedOption) => {
-                  let itemsDangersComplementTextSelected: string = state.itemsDangersComplementSelectedText;
-                  const valueSelected: string = selectedOption.text.concat(", ");
-                  if (selectedOption.selected) {
-                    itemsDangersComplementTextSelected = itemsDangersComplementTextSelected.length === 0 ? valueSelected : itemsDangersComplementTextSelected.concat(valueSelected);
-                  }
-                  else {
-                    itemsDangersComplementTextSelected = itemsDangersComplementTextSelected.length === 0 ? "" : itemsDangersComplementTextSelected.replace(valueSelected, "");
-                  }
-                  updateState({ ...state, itemsDangersComplementSelectedText: itemsDangersComplementTextSelected });
-                }}
-              />
-            </Stack.Item>
-          )}
-        </Stack>
+        {!(!!state.itemsDangersComplementSelectedText && displayMode === DisplayMode.ViewMode) && (
+          <>
+            <Label>Complément</Label>
+            <Stack horizontal tokens={{ childrenGap: 20 }}>
+              <Stack.Item grow={6}>
+                <TextField
+                  ariaLabel="Without visible label"
+                  value={state.itemsDangersComplementSelectedText}
+                  disabled={viewMode}
+                  onChange={(e, text) => {
+                    updateState({ ...state, itemsDangersComplementSelectedText: text });
+                  }}
+                />
+              </Stack.Item>
+              {!viewMode && (
+                <Stack.Item grow={0}>
+                  <ComboBox
+                    multiSelect
+                    className={styles.comboBoxTEEEEEEST}
+                    options={state.dangersComplementIComboBoxOption}
+                    styles={comboBoxStyles}
+                    buttonIconProps={{ iconName: "More" }}
+                    onChange={(event, selectedOption) => updateSelectedText(selectedOption, "itemsDangersComplementSelectedText")}
+                  />
+                </Stack.Item>
+              )}
+            </Stack>
+          </>
+        )}
 
         <Label>Toxicité</Label>
         <Stack horizontal tokens={{ childrenGap: 20 }}>
@@ -612,85 +526,52 @@ export const CustomForm: React.FC<ICustomFormProps> = ({ state, updateState, dis
                 options={state.toxicFilterIComboBoxOption}
                 styles={comboBoxStyles}
                 buttonIconProps={{ iconName: "More" }}
-                onChange={(e, selectedOption) => {
-                  let itemsToxicFilterFilterSelected: string = state.itemsToxicFilterSelectedText;
-                  const valueSelected: string = selectedOption.text.concat(", ");
-                  const item: any = state.itemsToxicFilter.filter(item => item.ID === selectedOption.key);
-
-                  let arrayPictures: string[] = state.urlsPicturesSelected;
-                  let itemsPicsSelected: any[] = state.itemsPicsSelected;
-
-                  if (selectedOption.selected) {
-                    itemsToxicFilterFilterSelected = itemsToxicFilterFilterSelected.length === 0 ? valueSelected : itemsToxicFilterFilterSelected.concat(valueSelected);
-
-                    itemsPicsSelected.push(item[0]);
-
-                    if (item[0].Picture !== null) {
-                      if (arrayPictures.length === 0 || arrayPictures.indexOf(item[0].Picture) === -1) {
-                        arrayPictures.push(item[0].Picture);
-                      }
-                    }
-                  }
-                  else {
-                    itemsToxicFilterFilterSelected = itemsToxicFilterFilterSelected.length === 0 ? "" : itemsToxicFilterFilterSelected.replace(valueSelected, "");
-
-                    itemsPicsSelected = itemsPicsSelected.filter(i => i.Id !== selectedOption.key && i.Title !== selectedOption.text);
-
-                    if (item[0].Picture !== null && itemsPicsSelected.filter(i => i.Picture === item[0].Picture).length === 0) {
-                      arrayPictures = arrayPictures.filter(i => i !== item[0].Picture);
-                    }
-
-                  }
-
-
-                  updateState({
-                    ...state,
-                    itemsToxicFilterSelectedText: itemsToxicFilterFilterSelected,
-                    urlsPicturesSelected: arrayPictures,
-                    itemsPicsSelected: itemsPicsSelected
-                  });
-
-                }}
+                onChange={(event, selectedOption) => updateSelectedItems(selectedOption, "itemsToxicFilterSelectedText", "itemsToxicFilter")}
               />
             </Stack.Item>
           )}
         </Stack>
 
-        <Label>Complément</Label>
-        <Stack horizontal tokens={{ childrenGap: 20 }}>
-          <Stack.Item grow={6}>
-            <TextField
-              ariaLabel="Without visible label"
-              value={state.itemsToxiciteComplementSelectedText}
-              disabled={viewMode}
-              onChange={(e, text) => {
-                updateState({ ...state, itemsToxiciteComplementSelectedText: text });
-              }}
-            />
-          </Stack.Item>
-          {!viewMode && (
-            <Stack.Item grow={0}>
-              <ComboBox
-                multiSelect
-                className={styles.comboBoxTEEEEEEST}
-                options={state.toxiciteComplementIComboBoxOption}
-                styles={comboBoxStyles}
-                buttonIconProps={{ iconName: "More" }}
-                onChange={(e, selectedOption) => {
-                  let itemsToxiciteComplementFilterSelected: string = state.itemsToxiciteComplementSelectedText;
-                  const valueSelected: string = selectedOption.text.concat(", ");
-                  if (selectedOption.selected) {
-                    itemsToxiciteComplementFilterSelected = itemsToxiciteComplementFilterSelected.length === 0 ? valueSelected : itemsToxiciteComplementFilterSelected.concat(valueSelected);
-                  }
-                  else {
-                    itemsToxiciteComplementFilterSelected = itemsToxiciteComplementFilterSelected.length === 0 ? "" : itemsToxiciteComplementFilterSelected.replace(valueSelected, "");
-                  }
-                  updateState({ ...state, itemsToxiciteComplementSelectedText: itemsToxiciteComplementFilterSelected });
-                }}
-              />
-            </Stack.Item>
-          )}
-        </Stack>
+        {!(!!state.itemsToxiciteComplementSelectedText && displayMode === DisplayMode.ViewMode) && (
+          <>
+            <Label>Complément</Label>
+            <Stack horizontal tokens={{ childrenGap: 20 }}>
+              <Stack.Item grow={6}>
+                <TextField
+                  ariaLabel="Without visible label"
+                  value={state.itemsToxiciteComplementSelectedText}
+                  disabled={viewMode}
+                  onChange={(e, text) => {
+                    updateState({ ...state, itemsToxiciteComplementSelectedText: text });
+                  }}
+                />
+              </Stack.Item>
+              {!viewMode && (
+                <Stack.Item grow={0}>
+                  <ComboBox
+                    multiSelect
+                    className={styles.comboBoxTEEEEEEST}
+                    options={state.toxiciteComplementIComboBoxOption}
+                    styles={comboBoxStyles}
+                    buttonIconProps={{ iconName: "More" }}
+                    onChange={(event, selectedOption) => updateSelectedText(selectedOption, "itemsToxiciteComplementSelectedText")}
+                  // onChange={(e, selectedOption) => {
+                  //   let itemsToxiciteComplementFilterSelected: string = state.itemsToxiciteComplementSelectedText;
+                  //   const valueSelected: string = selectedOption.text.concat(", ");
+                  //   if (selectedOption.selected) {
+                  //     itemsToxiciteComplementFilterSelected = itemsToxiciteComplementFilterSelected.length === 0 ? valueSelected : itemsToxiciteComplementFilterSelected.concat(valueSelected);
+                  //   }
+                  //   else {
+                  //     itemsToxiciteComplementFilterSelected = itemsToxiciteComplementFilterSelected.length === 0 ? "" : itemsToxiciteComplementFilterSelected.replace(valueSelected, "");
+                  //   }
+                  //   updateState({ ...state, itemsToxiciteComplementSelectedText: itemsToxiciteComplementFilterSelected });
+                  // }}
+                  />
+                </Stack.Item>
+              )}
+            </Stack>
+          </>
+        )}
 
         <Label>EPI additionnels requis</Label>
         <Stack horizontal tokens={{ childrenGap: 20 }}>
@@ -712,17 +593,18 @@ export const CustomForm: React.FC<ICustomFormProps> = ({ state, updateState, dis
                 options={state.protectionIComboBoxOption}
                 styles={comboBoxStyles}
                 buttonIconProps={{ iconName: "More" }}
-                onChange={(e, selectedOption) => {
-                  let itemsProtectionFilterSelected: string = state.itemsProtectionSelectedText;
-                  const valueSelected: string = selectedOption.text.concat(", ");
-                  if (selectedOption.selected) {
-                    itemsProtectionFilterSelected = itemsProtectionFilterSelected.length === 0 ? valueSelected : itemsProtectionFilterSelected.concat(valueSelected);
-                  }
-                  else {
-                    itemsProtectionFilterSelected = itemsProtectionFilterSelected.length === 0 ? "" : itemsProtectionFilterSelected.replace(valueSelected, "");
-                  }
-                  updateState({ ...state, itemsProtectionSelectedText: itemsProtectionFilterSelected });
-                }}
+                onChange={(event, selectedOption) => updateSelectedText(selectedOption, "itemsProtectionSelectedText")}
+              // onChange={(e, selectedOption) => {
+              //   let itemsProtectionFilterSelected: string = state.itemsProtectionSelectedText;
+              //   const valueSelected: string = selectedOption.text.concat(", ");
+              //   if (selectedOption.selected) {
+              //     itemsProtectionFilterSelected = itemsProtectionFilterSelected.length === 0 ? valueSelected : itemsProtectionFilterSelected.concat(valueSelected);
+              //   }
+              //   else {
+              //     itemsProtectionFilterSelected = itemsProtectionFilterSelected.length === 0 ? "" : itemsProtectionFilterSelected.replace(valueSelected, "");
+              //   }
+              //   updateState({ ...state, itemsProtectionSelectedText: itemsProtectionFilterSelected });
+              // }}
               />
             </Stack.Item>
           )}
@@ -748,17 +630,18 @@ export const CustomForm: React.FC<ICustomFormProps> = ({ state, updateState, dis
                 options={state.mesuresParticuileresIComboBoxOption}
                 styles={comboBoxStyles}
                 buttonIconProps={{ iconName: "More" }}
-                onChange={(e, selectedOption) => {
-                  let itemsMesuresParticuileresFilterSelected: string = state.itemsMesuresParticuileresSelectedText;
-                  const valueSelected: string = selectedOption.text.concat(", ");
-                  if (selectedOption.selected) {
-                    itemsMesuresParticuileresFilterSelected = itemsMesuresParticuileresFilterSelected.length === 0 ? valueSelected : itemsMesuresParticuileresFilterSelected.concat(valueSelected);
-                  }
-                  else {
-                    itemsMesuresParticuileresFilterSelected = itemsMesuresParticuileresFilterSelected.length === 0 ? "" : itemsMesuresParticuileresFilterSelected.replace(valueSelected, "");
-                  }
-                  updateState({ ...state, itemsMesuresParticuileresSelectedText: itemsMesuresParticuileresFilterSelected });
-                }}
+                onChange={(event, selectedOption) => updateSelectedText(selectedOption, "itemsMesuresParticuileresSelectedText")}
+              //   onChange={(e, selectedOption) => {
+              //     let itemsMesuresParticuileresFilterSelected: string = state.itemsMesuresParticuileresSelectedText;
+              //     const valueSelected: string = selectedOption.text.concat(", ");
+              //     if (selectedOption.selected) {
+              //       itemsMesuresParticuileresFilterSelected = itemsMesuresParticuileresFilterSelected.length === 0 ? valueSelected : itemsMesuresParticuileresFilterSelected.concat(valueSelected);
+              //     }
+              //     else {
+              //       itemsMesuresParticuileresFilterSelected = itemsMesuresParticuileresFilterSelected.length === 0 ? "" : itemsMesuresParticuileresFilterSelected.replace(valueSelected, "");
+              //     }
+              //     updateState({...state, itemsMesuresParticuileresSelectedText: itemsMesuresParticuileresFilterSelected });
+              //   }}
               />
             </Stack.Item>
           )}
@@ -784,41 +667,42 @@ export const CustomForm: React.FC<ICustomFormProps> = ({ state, updateState, dis
                 options={state.environmentFilterIComboBoxOption}
                 styles={comboBoxStyles}
                 buttonIconProps={{ iconName: "More" }}
-                onChange={(e, selectedOption) => {
-                  let itemsEnvironmentFilterSelected: string = state.itemsEnvironmentFilterSelectedText;
-                  const valueSelected: string = selectedOption.text.concat(", ");
-                  const item: any = state.itemsEnvironmentFilter.filter(item => item.ID === selectedOption.key);
+                onChange={(event, selectedOption) => updateSelectedItems(selectedOption, "itemsEnvironmentFilterSelectedText", "itemsEnvironmentFilter")}
+              // onChange={(e, selectedOption) => {
+              //   let itemsEnvironmentFilterSelected: string = state.itemsEnvironmentFilterSelectedText;
+              //   const valueSelected: string = selectedOption.text.concat(", ");
+              //   const item: any = state.itemsEnvironmentFilter.filter(item => item.ID === selectedOption.key);
 
-                  let arrayPictures: string[] = state.urlsPicturesSelected;
-                  let itemsPicsSelected: any[] = state.itemsPicsSelected;
+              //   let arrayPictures: string[] = state.urlsPicturesSelected;
+              //   let itemsPicsSelected: any[] = state.itemsPicsSelected;
 
-                  if (selectedOption.selected) {
-                    itemsEnvironmentFilterSelected = itemsEnvironmentFilterSelected.length === 0 ? valueSelected : itemsEnvironmentFilterSelected.concat(valueSelected);
+              //   if (selectedOption.selected) {
+              //     itemsEnvironmentFilterSelected = itemsEnvironmentFilterSelected.length === 0 ? valueSelected : itemsEnvironmentFilterSelected.concat(valueSelected);
 
-                    itemsPicsSelected.push(item[0]);
+              //     itemsPicsSelected.push(item[0]);
 
-                    if (item[0].Picture !== null) {
-                      if (arrayPictures.length === 0 || arrayPictures.indexOf(item[0].Picture) === -1) {
-                        arrayPictures.push(item[0].Picture);
-                      }
-                    }
-                  }
-                  else {
-                    itemsEnvironmentFilterSelected = itemsEnvironmentFilterSelected.length === 0 ? "" : itemsEnvironmentFilterSelected.replace(valueSelected, "");
+              //     if (item[0].Picture !== null) {
+              //       if (arrayPictures.length === 0 || arrayPictures.indexOf(item[0].Picture) === -1) {
+              //         arrayPictures.push(item[0].Picture);
+              //       }
+              //     }
+              //   }
+              //   else {
+              //     itemsEnvironmentFilterSelected = itemsEnvironmentFilterSelected.length === 0 ? "" : itemsEnvironmentFilterSelected.replace(valueSelected, "");
 
-                    itemsPicsSelected = itemsPicsSelected.filter(i => i.Id !== selectedOption.key && i.Title !== selectedOption.text);
+              //     itemsPicsSelected = itemsPicsSelected.filter(i => i.Id !== selectedOption.key && i.Title !== selectedOption.text);
 
-                    if (item[0].Picture !== null && itemsPicsSelected.filter(i => i.Picture === item[0].Picture).length === 0) {
-                      arrayPictures = arrayPictures.filter(i => i !== item[0].Picture);
-                    }
-                  }
-                  updateState({
-                    ...state,
-                    itemsEnvironmentFilterSelectedText: itemsEnvironmentFilterSelected,
-                    urlsPicturesSelected: arrayPictures,
-                    itemsPicsSelected: itemsPicsSelected
-                  });
-                }}
+              //     if (item[0].Picture !== null && itemsPicsSelected.filter(i => i.Picture === item[0].Picture).length === 0) {
+              //       arrayPictures = arrayPictures.filter(i => i !== item[0].Picture);
+              //     }
+              //   }
+              //   updateState({
+              //     ...state,
+              //     itemsEnvironmentFilterSelectedText: itemsEnvironmentFilterSelected,
+              //     urlsPicturesSelected: arrayPictures,
+              //     itemsPicsSelected: itemsPicsSelected
+              //   });
+              // }}
               />
             </Stack.Item>
           )}
@@ -888,17 +772,18 @@ export const CustomForm: React.FC<ICustomFormProps> = ({ state, updateState, dis
                 options={state.corpsecrespIComboBoxOption}
                 styles={comboBoxStyles}
                 buttonIconProps={{ iconName: "More" }}
-                onChange={(e, selectedOption) => {
-                  let itemsCorpsecrespTextSelected: string = state.itemsCorpsecrespSelectedText;
-                  const valueSelected: string = selectedOption.text.concat(", ");
-                  if (selectedOption.selected) {
-                    itemsCorpsecrespTextSelected = itemsCorpsecrespTextSelected.length === 0 ? valueSelected : itemsCorpsecrespTextSelected.concat(valueSelected);
-                  }
-                  else {
-                    itemsCorpsecrespTextSelected = itemsCorpsecrespTextSelected.length === 0 ? "" : itemsCorpsecrespTextSelected.replace(valueSelected, "");
-                  }
-                  updateState({ ...state, itemsCorpsecrespSelectedText: itemsCorpsecrespTextSelected });
-                }}
+                onChange={(event, selectedOption) => updateSelectedText(selectedOption, "itemsCorpsecrespSelectedText")}
+              // onChange={(e, selectedOption) => {
+              //   let itemsCorpsecrespTextSelected: string = state.itemsCorpsecrespSelectedText;
+              //   const valueSelected: string = selectedOption.text.concat(", ");
+              //   if (selectedOption.selected) {
+              //     itemsCorpsecrespTextSelected = itemsCorpsecrespTextSelected.length === 0 ? valueSelected : itemsCorpsecrespTextSelected.concat(valueSelected);
+              //   }
+              //   else {
+              //     itemsCorpsecrespTextSelected = itemsCorpsecrespTextSelected.length === 0 ? "" : itemsCorpsecrespTextSelected.replace(valueSelected, "");
+              //   }
+              //   updateState({ ...state, itemsCorpsecrespSelectedText: itemsCorpsecrespTextSelected });
+              // }}
               />
             </Stack.Item>
           )}
@@ -924,17 +809,18 @@ export const CustomForm: React.FC<ICustomFormProps> = ({ state, updateState, dis
                 options={state.corpsecpeauIComboBoxOption}
                 styles={comboBoxStyles}
                 buttonIconProps={{ iconName: "More" }}
-                onChange={(e, selectedOption) => {
-                  let itemsCorpsecpeauTextSelected: string = state.itemsCorpsecpeauSelectedText;
-                  const valueSelected: string = selectedOption.text.concat(", ");
-                  if (selectedOption.selected) {
-                    itemsCorpsecpeauTextSelected = itemsCorpsecpeauTextSelected.length === 0 ? valueSelected : itemsCorpsecpeauTextSelected.concat(valueSelected);
-                  }
-                  else {
-                    itemsCorpsecpeauTextSelected = itemsCorpsecpeauTextSelected.length === 0 ? "" : itemsCorpsecpeauTextSelected.replace(valueSelected, "");
-                  }
-                  updateState({ ...state, itemsCorpsecpeauSelectedText: itemsCorpsecpeauTextSelected });
-                }}
+                onChange={(event, selectedOption) => updateSelectedText(selectedOption, "itemsCorpsecpeauSelectedText")}
+              // onChange={(e, selectedOption) => {
+              //   let itemsCorpsecpeauTextSelected: string = state.itemsCorpsecpeauSelectedText;
+              //   const valueSelected: string = selectedOption.text.concat(", ");
+              //   if (selectedOption.selected) {
+              //     itemsCorpsecpeauTextSelected = itemsCorpsecpeauTextSelected.length === 0 ? valueSelected : itemsCorpsecpeauTextSelected.concat(valueSelected);
+              //   }
+              //   else {
+              //     itemsCorpsecpeauTextSelected = itemsCorpsecpeauTextSelected.length === 0 ? "" : itemsCorpsecpeauTextSelected.replace(valueSelected, "");
+              //   }
+              //   updateState({ ...state, itemsCorpsecpeauSelectedText: itemsCorpsecpeauTextSelected });
+              // }}
               />
             </Stack.Item>
           )}
@@ -960,17 +846,18 @@ export const CustomForm: React.FC<ICustomFormProps> = ({ state, updateState, dis
                 options={state.corpsecyeuxIComboBoxOption}
                 styles={comboBoxStyles}
                 buttonIconProps={{ iconName: "More" }}
-                onChange={(e, selectedOption) => {
-                  let itemsCorpsecyeuxTextSelected: string = state.itemsCorpsecyeuxSelectedText;
-                  const valueSelected: string = selectedOption.text.concat(", ");
-                  if (selectedOption.selected) {
-                    itemsCorpsecyeuxTextSelected = itemsCorpsecyeuxTextSelected.length === 0 ? valueSelected : itemsCorpsecyeuxTextSelected.concat(valueSelected);
-                  }
-                  else {
-                    itemsCorpsecyeuxTextSelected = itemsCorpsecyeuxTextSelected.length === 0 ? "" : itemsCorpsecyeuxTextSelected.replace(valueSelected, "");
-                  }
-                  updateState({ ...state, itemsCorpsecyeuxSelectedText: itemsCorpsecyeuxTextSelected });
-                }}
+                onChange={(event, selectedOption) => updateSelectedText(selectedOption, "itemsCorpsecyeuxSelectedText")}
+              // onChange={(e, selectedOption) => {
+              //   let itemsCorpsecyeuxTextSelected: string = state.itemsCorpsecyeuxSelectedText;
+              //   const valueSelected: string = selectedOption.text.concat(", ");
+              //   if (selectedOption.selected) {
+              //     itemsCorpsecyeuxTextSelected = itemsCorpsecyeuxTextSelected.length === 0 ? valueSelected : itemsCorpsecyeuxTextSelected.concat(valueSelected);
+              //   }
+              //   else {
+              //     itemsCorpsecyeuxTextSelected = itemsCorpsecyeuxTextSelected.length === 0 ? "" : itemsCorpsecyeuxTextSelected.replace(valueSelected, "");
+              //   }
+              //   updateState({ ...state, itemsCorpsecyeuxSelectedText: itemsCorpsecyeuxTextSelected });
+              // }}
               />
             </Stack.Item>
           )}
@@ -998,17 +885,18 @@ export const CustomForm: React.FC<ICustomFormProps> = ({ state, updateState, dis
                 options={state.referenceIComboBoxOption}
                 styles={comboBoxStyles}
                 buttonIconProps={{ iconName: "More" }}
-                onChange={(e, selectedOption) => {
-                  let itemsReferenceFilterSelected: string = state.itemsReferenceSelectedText;
-                  const valueSelected: string = selectedOption.text.concat(", ");
-                  if (selectedOption.selected) {
-                    itemsReferenceFilterSelected = itemsReferenceFilterSelected.length === 0 ? valueSelected : itemsReferenceFilterSelected.concat(valueSelected);
-                  }
-                  else {
-                    itemsReferenceFilterSelected = itemsReferenceFilterSelected.length === 0 ? "" : itemsReferenceFilterSelected.replace(valueSelected, "");
-                  }
-                  updateState({ ...state, itemsReferenceSelectedText: itemsReferenceFilterSelected });
-                }}
+                onChange={(event, selectedOption) => updateSelectedText(selectedOption, "itemsReferenceSelectedText")}
+              // onChange={(e, selectedOption) => {
+              //   let itemsReferenceFilterSelected: string = state.itemsReferenceSelectedText;
+              //   const valueSelected: string = selectedOption.text.concat(", ");
+              //   if (selectedOption.selected) {
+              //     itemsReferenceFilterSelected = itemsReferenceFilterSelected.length === 0 ? valueSelected : itemsReferenceFilterSelected.concat(valueSelected);
+              //   }
+              //   else {
+              //     itemsReferenceFilterSelected = itemsReferenceFilterSelected.length === 0 ? "" : itemsReferenceFilterSelected.replace(valueSelected, "");
+              //   }
+              //   updateState({ ...state, itemsReferenceSelectedText: itemsReferenceFilterSelected });
+              // }}
               />
             </Stack.Item>
           )}
