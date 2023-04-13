@@ -53,7 +53,8 @@ export const useComboBoxSelectionHandler = ({ state, updateState }: IComboBoxSel
     if (selected) {
       itemsSelectedText = itemsSelectedText.length === 0
         ? selectedValue
-        : itemsSelectedText.concat(selectedValue);
+        : `${itemsSelectedText}${selectedValue}`;
+      // : itemsSelectedText.concat(selectedValue);
 
       selectedItems = [...selectedItems, selectedItem];
 
