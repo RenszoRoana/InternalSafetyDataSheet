@@ -37,9 +37,9 @@ export class Utils {
   };
 
   public static CheckCommas(str: string): string {
+    if (!str) return "";
     let newString = str.trim();
     newString = newString.endsWith(",") ? `${newString} ` : `${newString}, `;
     return newString;
   }
-
 }
