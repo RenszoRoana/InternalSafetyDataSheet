@@ -6,10 +6,11 @@ import { IComboBoxOption, SelectableOptionMenuItemType } from "office-ui-fabric-
 
 import { IResponseItem } from "../../../Interfaces/Item";
 import InternalSafetyDataSheetService from "../../../Services/InternalSafetyDataSheetService";
-import fields from "../../../config/configList.json";
 import { Utils } from "../utils/Utils";
 import { CustomForm } from "./CustomForm";
 import { DisplayMode, IFirmenichCustomFormProps, IFirmenichCustomFormState } from "./IFirmenichCustomForm";
+
+import fields from "../../../config/configList.json";
 
 const LOG_SOURCE: string = "FirmenichCustomForm";
 
@@ -43,6 +44,7 @@ export default class FirmenichCustomForm extends React.Component<IFirmenichCusto
       Supinflammation: "",
       Densvap: "",
       Tensvap: "",
+      SolubiliteDansLeau: "",
       Vmeppm: "",
       CL50inhal: "",
       Vleppm: "",
@@ -54,6 +56,11 @@ export default class FirmenichCustomForm extends React.Component<IFirmenichCusto
       Modifdoc: "",
       Visadate: "",
       Visapers: "",
+
+      Dangers: [],
+      Aspect: [],
+      Couleur: "",
+      Odeur: [],
 
       itemsPicsSelected: [],
       urlsPicturesSelected: [],
@@ -156,10 +163,16 @@ export default class FirmenichCustomForm extends React.Component<IFirmenichCusto
   }
 
 
+
   public async componentDidMount(): Promise<void> {
     Log.info(LOG_SOURCE, "React Element: FirmenichCustomForm mounted");
 
+
     const listItem: IResponseItem = await this._internalSafetyDataSheetService.GetItemsById("Internal Safety DataSheets", 148);
+    console.log("listItem", listItem);
+
+    const item = await this._internalSafetyDataSheetService.GetItemsById("Internal Safety DataSheets", 148);
+    console.log("ITEM", item);
 
     // var items : any[] = await this.internalSafetyDataSheetService.GetItemsCurrentList(this.props.context.list.guid.toString());
     // console.log(items);
@@ -180,13 +193,15 @@ export default class FirmenichCustomForm extends React.Component<IFirmenichCusto
 
     if (+this.props.displayMode === DisplayMode.NewMode) {
       this.setState({ ...this.state, ...updatedState });
+      console.log("STATE", updatedState);
     }
 
-    if (+this.props.displayMode === 6) {
+    if (+this.props.displayMode === DisplayMode.EditMode) {
       this.setState({ ...this.state, ...updatedState, ...listItem });
+      console.log("THIS_STATE", this.state);
     }
 
-    if (this.props.displayMode === 4) {
+    if (+this.props.displayMode === DisplayMode.ViewMode) {
       this.setState({ ...this.state, ...updatedState, ...listItem });
     }
   }
@@ -201,7 +216,7 @@ export default class FirmenichCustomForm extends React.Component<IFirmenichCusto
     );
   }
 
-  private _updateState = (newState): void => {
+  public _updateState = (newState): void => {
     this.setState(newState);
   };
 
