@@ -2,9 +2,12 @@ import { IComboBoxOption } from "office-ui-fabric-react";
 import { IFirmenichCustomFormState } from "../components/IFirmenichCustomForm";
 import { Utils } from "../utils/Utils";
 
+type StateUpdater<T> = (state: T) => void;
 interface IComboBoxSelectionHandlerHook {
   state: IFirmenichCustomFormState;
-  updateState: (state: IFirmenichCustomFormState) => void;
+
+  updateState: StateUpdater<{ [key: string]: string }>
+  // updateState: (state: IFirmenichCustomFormState) => void;
 }
 
 export const useComboBoxSelectionHandler = ({ state, updateState }: IComboBoxSelectionHandlerHook) => {
@@ -34,7 +37,7 @@ export const useComboBoxSelectionHandler = ({ state, updateState }: IComboBoxSel
       selectedOption.selected
     );
 
-    updateState({ ...state, [fieldName]: updatedItemsSelectedText });
+    updateState({ [fieldName]: updatedItemsSelectedText });
   };
 
 
@@ -77,7 +80,7 @@ export const useComboBoxSelectionHandler = ({ state, updateState }: IComboBoxSel
     }
 
     const updatedState = {
-      ...state,
+      // ...state,
       [itemsFilterSelectedText]: itemsSelectedText,
       urlsPicturesSelected: selectedPictures,
       itemsPicsSelected: selectedItems
