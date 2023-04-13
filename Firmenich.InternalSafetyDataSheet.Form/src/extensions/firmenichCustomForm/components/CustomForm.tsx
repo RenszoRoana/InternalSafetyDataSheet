@@ -14,11 +14,13 @@ import { DisplayMode, IFirmenichCustomFormState } from "./IFirmenichCustomForm";
 
 import styles from "./FirmenichCustomForm.module.scss";
 
+type StateUpdater<T> = (state: T) => void;
+
 export interface ICustomFormProps {
   context: FormCustomizerContext;
   state: IFirmenichCustomFormState;
   displayMode: number;
-  updateState: (state) => void;
+  updateState: StateUpdater<{ [key: string]: string }>
   onSave: () => void;
   onClose: () => void;
 };
@@ -111,7 +113,7 @@ export const CustomForm: React.FC<ICustomFormProps> = ({ state, updateState, dis
               value={state.Nomchimique}
               disabled={viewMode}
               onChange={(e, Nomchimique) => {
-                updateState({ ...state, Nomchimique: Nomchimique });
+                updateState({ Nomchimique: Nomchimique });
               }}
             />
           </Stack.Item>
@@ -124,7 +126,7 @@ export const CustomForm: React.FC<ICustomFormProps> = ({ state, updateState, dis
               value={state.NoCAS}
               disabled={viewMode}
               onChange={(e, NoCAS) => {
-                updateState({ ...state, NoCAS: NoCAS });
+                updateState({ NoCAS: NoCAS });
               }}
             />
           </Stack.Item>
@@ -134,7 +136,7 @@ export const CustomForm: React.FC<ICustomFormProps> = ({ state, updateState, dis
               value={state.CodeONU}
               disabled={viewMode}
               onChange={(e, CodeONU) => {
-                updateState({ ...state, CodeONU: CodeONU });
+                updateState({ CodeONU: CodeONU });
               }}
             />
           </Stack.Item>
@@ -147,7 +149,7 @@ export const CustomForm: React.FC<ICustomFormProps> = ({ state, updateState, dis
               value={state.Nomchim}
               disabled={viewMode}
               onChange={(e, Nomchim) => {
-                updateState({ ...state, Nomchim: Nomchim });
+                updateState({ Nomchim: Nomchim });
               }}
             />
           </Stack.Item>
@@ -157,7 +159,7 @@ export const CustomForm: React.FC<ICustomFormProps> = ({ state, updateState, dis
               value={state.Poidsmol}
               disabled={viewMode}
               onChange={(e, Poidsmol) => {
-                updateState({ ...state, Poidsmol: Poidsmol });
+                updateState({ Poidsmol: Poidsmol });
               }}
             />
           </Stack.Item>
@@ -172,7 +174,7 @@ export const CustomForm: React.FC<ICustomFormProps> = ({ state, updateState, dis
                 value={state.itemsAspectSelectedText}
                 disabled={viewMode}
                 onChange={(e, text) => {
-                  updateState({ ...state, itemsAspectSelectedText: text });
+                  updateState({ itemsAspectSelectedText: text });
                 }}
               />
             </Stack.Item>
@@ -198,7 +200,7 @@ export const CustomForm: React.FC<ICustomFormProps> = ({ state, updateState, dis
                 value={state.itemsCouleurSelectedText}
                 disabled={viewMode}
                 onChange={(e, text) => {
-                  updateState({ ...state, itemsCouleurSelectedText: text });
+                  updateState({ itemsCouleurSelectedText: text });
                 }}
               />
             </Stack.Item>
@@ -226,7 +228,7 @@ export const CustomForm: React.FC<ICustomFormProps> = ({ state, updateState, dis
               value={state.itemsOdeurSelectedText}
               disabled={viewMode}
               onChange={(e, text) => {
-                updateState({ ...state, itemsOdeurSelectedText: text });
+                updateState({ itemsOdeurSelectedText: text });
               }}
             />
           </Stack.Item>
@@ -252,7 +254,7 @@ export const CustomForm: React.FC<ICustomFormProps> = ({ state, updateState, dis
               value={state.Comment1}
               disabled={viewMode}
               onChange={(e, Comment1) => {
-                updateState({ ...state, Comment1: Comment1 });
+                updateState({ Comment1: Comment1 });
               }}
             />
           </Stack.Item>
@@ -273,7 +275,7 @@ export const CustomForm: React.FC<ICustomFormProps> = ({ state, updateState, dis
               value={Utils.FormatDisplayMessage(state.Pointec)}
               disabled={viewMode}
               onChange={(e, Pointec) => {
-                updateState({ ...state, Pointec: Pointec });
+                updateState({ Pointec: Pointec });
               }}
             />
           </Stack.Item>
@@ -283,7 +285,7 @@ export const CustomForm: React.FC<ICustomFormProps> = ({ state, updateState, dis
               value={Utils.FormatDisplayMessage(state.Pointfus)}
               disabled={viewMode}
               onChange={(e, Pointfus) => {
-                updateState({ ...state, Pointfus: Pointfus });
+                updateState({ Pointfus: Pointfus });
               }}
             />
           </Stack.Item>
@@ -296,7 +298,7 @@ export const CustomForm: React.FC<ICustomFormProps> = ({ state, updateState, dis
               value={Utils.FormatDisplayMessage(state.Pointinf)}
               disabled={viewMode}
               onChange={(e, Pointinf) => {
-                updateState({ ...state, Pointinf: Pointinf });
+                updateState({ Pointinf: Pointinf });
               }}
             />
           </Stack.Item>
@@ -306,7 +308,7 @@ export const CustomForm: React.FC<ICustomFormProps> = ({ state, updateState, dis
               value={Utils.FormatDisplayMessage(state.Pointeb)}
               disabled={viewMode}
               onChange={(e, Pointeb) => {
-                updateState({ ...state, Pointeb: Pointeb });
+                updateState({ Pointeb: Pointeb });
               }}
             />
           </Stack.Item>
@@ -319,7 +321,7 @@ export const CustomForm: React.FC<ICustomFormProps> = ({ state, updateState, dis
               value={state.Infinflammation}
               disabled={viewMode}
               onChange={(e, Infinflammation) => {
-                updateState({ ...state, Infinflammation: Infinflammation });
+                updateState({ Infinflammation: Infinflammation });
               }}
             />
           </Stack.Item>
@@ -329,7 +331,7 @@ export const CustomForm: React.FC<ICustomFormProps> = ({ state, updateState, dis
               value={Utils.FormatDisplayMessage(state.Densite)} // Actual internal name Densit_x00e9_,
               disabled={viewMode}
               onChange={(e, Densite) => {
-                updateState({ ...state, Densite: Densite });
+                updateState({ Densite: Densite });
               }}
             />
           </Stack.Item>
@@ -343,7 +345,7 @@ export const CustomForm: React.FC<ICustomFormProps> = ({ state, updateState, dis
               value={Utils.FormatDisplayMessage(state.Supinflammation)}
               disabled={viewMode}
               onChange={(e, Supinflammation) => {
-                updateState({ ...state, Supinflammation: Supinflammation });
+                updateState({ Supinflammation: Supinflammation });
               }}
             />
           </Stack.Item>
@@ -353,7 +355,7 @@ export const CustomForm: React.FC<ICustomFormProps> = ({ state, updateState, dis
               value={Utils.FormatDisplayMessage(state.Densvap)}
               disabled={viewMode}
               onChange={(e, Densvap) => {
-                updateState({ ...state, Densvap: Densvap });
+                updateState({ Densvap: Densvap });
               }}
             />
           </Stack.Item>
@@ -366,7 +368,7 @@ export const CustomForm: React.FC<ICustomFormProps> = ({ state, updateState, dis
               value={Utils.FormatDisplayMessage(state.Tensvap)}
               disabled={viewMode}
               onChange={(e, Tensvap) => {
-                updateState({ ...state, Tensvap: Tensvap });
+                updateState({ Tensvap: Tensvap });
               }}
             />
           </Stack.Item>
@@ -376,7 +378,7 @@ export const CustomForm: React.FC<ICustomFormProps> = ({ state, updateState, dis
               value={state.Solvants.toString()}
               disabled={viewMode}
               onChange={(e, SolubiliteDansLeau) => {
-                updateState({ ...state, SolubiliteDansLeau: SolubiliteDansLeau });
+                updateState({ SolubiliteDansLeau: SolubiliteDansLeau });
               }}
             />
           </Stack.Item>
@@ -389,7 +391,7 @@ export const CustomForm: React.FC<ICustomFormProps> = ({ state, updateState, dis
               value={Utils.FormatDisplayMessage(state.Vmeppm)}
               disabled={viewMode}
               onChange={(e, Vmeppm) => {
-                updateState({ ...state, Vmeppm: Vmeppm });
+                updateState({ Vmeppm: Vmeppm });
               }}
             />
           </Stack.Item>
@@ -399,7 +401,7 @@ export const CustomForm: React.FC<ICustomFormProps> = ({ state, updateState, dis
               value={Utils.FormatDisplayMessage(state.CL50inhal)}
               disabled={viewMode}
               onChange={(e, CL50inhal) => {
-                updateState({ ...state, CL50inhal: CL50inhal });
+                updateState({ CL50inhal: CL50inhal });
               }}
             />
           </Stack.Item>
@@ -412,7 +414,7 @@ export const CustomForm: React.FC<ICustomFormProps> = ({ state, updateState, dis
               value={Utils.FormatDisplayMessage(state.Vleppm)}
               disabled={viewMode}
               onChange={(e, Vleppm) => {
-                updateState({ ...state, Vleppm: Vleppm });
+                updateState({ Vleppm: Vleppm });
               }}
             />
           </Stack.Item>
@@ -422,7 +424,7 @@ export const CustomForm: React.FC<ICustomFormProps> = ({ state, updateState, dis
               value={Utils.FormatDisplayMessage(state.DL50dermal)}
               disabled={viewMode}
               onChange={(e, DL50dermal) => {
-                updateState({ ...state, DL50dermal: DL50dermal });
+                updateState({ DL50dermal: DL50dermal });
               }}
             />
           </Stack.Item>
@@ -435,7 +437,7 @@ export const CustomForm: React.FC<ICustomFormProps> = ({ state, updateState, dis
               value={Utils.FormatDisplayMessage(state.CE50mg)}
               disabled={viewMode}
               onChange={(e, CE50mg) => {
-                updateState({ ...state, CE50mg: CE50mg });
+                updateState({ CE50mg: CE50mg });
               }}
             />
           </Stack.Item>
@@ -445,7 +447,7 @@ export const CustomForm: React.FC<ICustomFormProps> = ({ state, updateState, dis
               value={Utils.FormatDisplayMessage(state.DL50)} // Internal name _x0044_L50
               disabled={viewMode}
               onChange={(e, DL50) => {
-                updateState({ ...state, DL50: DL50 });
+                updateState({ DL50: DL50 });
               }}
             />
           </Stack.Item>
@@ -461,7 +463,7 @@ export const CustomForm: React.FC<ICustomFormProps> = ({ state, updateState, dis
               value={state.itemsDangexiFilterSelectedText}
               disabled={viewMode}
               onChange={(e, text) => {
-                updateState({ ...state, itemsDangexiFilterSelectedText: text });
+                updateState({ itemsDangexiFilterSelectedText: text });
               }}
             />
           </Stack.Item>
@@ -490,7 +492,7 @@ export const CustomForm: React.FC<ICustomFormProps> = ({ state, updateState, dis
                   value={state.itemsDangersComplementSelectedText}
                   disabled={viewMode}
                   onChange={(e, text) => {
-                    updateState({ ...state, itemsDangersComplementSelectedText: text });
+                    updateState({ itemsDangersComplementSelectedText: text });
                   }}
                 />
               </Stack.Item>
@@ -518,7 +520,7 @@ export const CustomForm: React.FC<ICustomFormProps> = ({ state, updateState, dis
               value={state.itemsToxicFilterSelectedText} // Internal name Toxicit_x00e9_
               disabled={viewMode}
               onChange={(e, text) => {
-                updateState({ ...state, itemsToxicFilterSelectedText: text });
+                updateState({ itemsToxicFilterSelectedText: text });
               }}
             />
           </Stack.Item>
@@ -546,7 +548,7 @@ export const CustomForm: React.FC<ICustomFormProps> = ({ state, updateState, dis
                   value={state.itemsToxiciteComplementSelectedText}
                   disabled={viewMode}
                   onChange={(e, text) => {
-                    updateState({ ...state, itemsToxiciteComplementSelectedText: text });
+                    updateState({ itemsToxiciteComplementSelectedText: text });
                   }}
                 />
               </Stack.Item>
@@ -585,7 +587,7 @@ export const CustomForm: React.FC<ICustomFormProps> = ({ state, updateState, dis
               value={state.itemsProtectionSelectedText}
               disabled={viewMode}
               onChange={(e, itemsProtectionSelectedText) => {
-                updateState({ ...state, itemsProtectionSelectedText: itemsProtectionSelectedText });
+                updateState({ itemsProtectionSelectedText: itemsProtectionSelectedText });
               }}
             />
           </Stack.Item>
@@ -623,7 +625,7 @@ export const CustomForm: React.FC<ICustomFormProps> = ({ state, updateState, dis
               value={state.itemsMesuresParticuileresSelectedText}
               disabled={viewMode}
               onChange={(e, text) => {
-                updateState({ ...state, itemsMesuresParticuileresSelectedText: text });
+                updateState({ itemsMesuresParticuileresSelectedText: text });
               }}
             />
           </Stack.Item>
@@ -660,7 +662,7 @@ export const CustomForm: React.FC<ICustomFormProps> = ({ state, updateState, dis
               value={state.itemsEnvironmentFilterSelectedText}
               disabled={viewMode}
               onChange={(e, text) => {
-                updateState({ ...state, itemsEnvironmentFilterSelectedText: text });
+                updateState({ itemsEnvironmentFilterSelectedText: text });
               }}
             />
           </Stack.Item>
@@ -729,7 +731,7 @@ export const CustomForm: React.FC<ICustomFormProps> = ({ state, updateState, dis
               value={state.EpandageText}
               disabled={viewMode}
               onChange={(e, text) => {
-                updateState({ ...state, EpandageText: text });
+                updateState({ EpandageText: text });
               }}
             />
           </Stack.Item>
@@ -743,7 +745,7 @@ export const CustomForm: React.FC<ICustomFormProps> = ({ state, updateState, dis
               value={state.AccifeuEdited}
               disabled={viewMode}
               onChange={(e, text) => {
-                updateState({ ...state, AccifeuEdited: text });
+                updateState({ AccifeuEdited: text });
               }}
             />
           </Stack.Item>
@@ -765,7 +767,7 @@ export const CustomForm: React.FC<ICustomFormProps> = ({ state, updateState, dis
               value={state.itemsCorpsecrespSelectedText}
               disabled={viewMode}
               onChange={(e, text) => {
-                updateState({ ...state, itemsCorpsecrespSelectedText: text });
+                updateState({ itemsCorpsecrespSelectedText: text });
               }}
             />
           </Stack.Item>
@@ -802,7 +804,7 @@ export const CustomForm: React.FC<ICustomFormProps> = ({ state, updateState, dis
               value={state.itemsCorpsecpeauSelectedText}
               disabled={viewMode}
               onChange={(e, text) => {
-                updateState({ ...state, itemsCorpsecpeauSelectedText: text });
+                updateState({ itemsCorpsecpeauSelectedText: text });
               }}
             />
           </Stack.Item>
@@ -839,7 +841,7 @@ export const CustomForm: React.FC<ICustomFormProps> = ({ state, updateState, dis
               value={state.itemsCorpsecyeuxSelectedText}
               disabled={viewMode}
               onChange={(e, text) => {
-                updateState({ ...state, itemsCorpsecyeuxSelectedText: text });
+                updateState({ itemsCorpsecyeuxSelectedText: text });
               }}
             />
           </Stack.Item>
@@ -878,7 +880,7 @@ export const CustomForm: React.FC<ICustomFormProps> = ({ state, updateState, dis
               value={state.itemsReferenceSelectedText}
               disabled={viewMode}
               onChange={(e, text) => {
-                updateState({ ...state, itemsReferenceSelectedText: text });
+                updateState({ itemsReferenceSelectedText: text });
               }}
             />
           </Stack.Item>
@@ -917,7 +919,7 @@ export const CustomForm: React.FC<ICustomFormProps> = ({ state, updateState, dis
               value={state.Modifdoc}
               disabled={viewMode}
               onChange={(e, text) => {
-                updateState({ ...state, Modifdoc: text });
+                updateState({ Modifdoc: text });
               }}
             />
           </Stack.Item>
@@ -931,7 +933,7 @@ export const CustomForm: React.FC<ICustomFormProps> = ({ state, updateState, dis
               value={state.Visadate}
               disabled={viewMode}
               onChange={(e, text) => {
-                updateState({ ...state, Visadate: text });
+                updateState({ Visadate: text });
               }}
             />
           </Stack.Item>
@@ -945,7 +947,7 @@ export const CustomForm: React.FC<ICustomFormProps> = ({ state, updateState, dis
               value={state.Visapers}
               disabled={viewMode}
               onChange={(e, text) => {
-                updateState({ ...state, Visapers: text });
+                updateState({ Visapers: text });
               }}
             />
           </Stack.Item>
