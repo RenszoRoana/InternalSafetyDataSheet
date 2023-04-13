@@ -23,20 +23,19 @@ export interface IFirmenichCustomFormState {
     Mention: string;
     Nomchimique: string;
     NoCAS: string;
-    CodeOnu: string;
-    NomChim: string;
+    CodeONU: string;
+    Nomchim: string;
     Poidsmol: string;
     Comment1: string;
     Pointec: string;
     Pointfus: string;
-    Pointif: string;
+    Pointinf: string;
     Pointeb: string;
     Infinflammation: string;
     Densite: string;
     Supinflammation: string;
     Densvap: string;
     Tensvap: string;
-    SolubiliteDansLeau: string;
     Vmeppm: string;
     CL50inhal: string;
     Vleppm: string;
@@ -53,6 +52,10 @@ export interface IFirmenichCustomFormState {
     Aspect: string[];
     Couleur: string;
     Odeur: string[];
+    Solvants: string[];
+    Dangerxi: string[];
+    Protection: string[],
+
 
     itemsPicsSelected: any[];
     urlsPicturesSelected: string[];
