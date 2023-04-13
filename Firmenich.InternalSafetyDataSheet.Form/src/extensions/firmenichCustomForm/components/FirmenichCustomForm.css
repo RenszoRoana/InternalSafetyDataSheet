@@ -1,7 +1,0 @@
-input[id*='ComboBox']{
-    display: none;
-}
-  
-div[id*='ComboBox'] {
-    padding-left: 0;
-}
