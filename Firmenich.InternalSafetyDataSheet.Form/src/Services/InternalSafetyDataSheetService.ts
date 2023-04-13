@@ -3,6 +3,7 @@ import { IWeb, Web } from "@pnp/sp/presets/all";
 import { ISiteUserInfo } from "@pnp/sp/site-users/types";
 import { IInternalSafetyDataSheetItem } from "../Interfaces/IIterfaces";
 
+
 export default class InternalSafetyDataSheetService {
   private _web: IWeb;
 
@@ -29,16 +30,20 @@ export default class InternalSafetyDataSheetService {
     await this._web.lists.getByTitle(listName).items.add({
       Title: internalSafetyDataSheetItem.Title,
       RaonaAcciepand: {
-        results: [internalSafetyDataSheetItem.RaonaAcciepand]
+        results: [internalSafetyDataSheetItem.Acciepand]
       }
     });
 
   }
+
   public async UpdateInternalSafetyDataSheetItem(listName: string, itemId: number, internalSafetyDataSheetItem: IInternalSafetyDataSheetItem): Promise<void> {
     await this._web.lists.getByTitle(listName).items.getById(itemId).update({
       Title: internalSafetyDataSheetItem.Title,
-      RaonaAcciepand: {
-        results: [internalSafetyDataSheetItem.RaonaAcciepand]
+      Acciepand: {
+        results: [internalSafetyDataSheetItem.Acciepand]
+      },
+      Dangers: {
+        results: [internalSafetyDataSheetItem.Dangers]
       }
     });
   }
